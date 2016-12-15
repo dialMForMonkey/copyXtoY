@@ -1,65 +1,36 @@
+var program = require('commander');
+var chalk = require('chalk');
 var fs = require('fs');
 
-var to = './teste';
-var from = './teste_2';
+//TODO: separar em processos
 
-//TODO : verificar se pasta destino existe
-//TODO : verificar se o arquivo foi copiado
-//TODO : verificar se muitos arquivos foram copiados
-//TODO: criar pasta por pasta
+function createFile() {
+    var data = '[\{\"caminho_de\":\"\"\, \"caminho_para\":\"\"\}]';
+    fs.writeFile('./monitorar.json', data, function(err) {
 
-fs.exists(to, function(exists) {
-    if (exists) {
-        fs.watch(to, {
-            recursive: true
-        }, function(event, filename) {
-            console.log('evento', event);
-            console.log('alterado', filename);
-            
-
-            copyXtoY(
-                to.concat('/', filename),
-                from.concat('/', filename)
-            );
-
-            //recebo
-            //subPasta/subPasta/subTrosso.txt
-        });
-    } else {
-        console.log('caminho nao existe');
-    }
-});
-
-
-function copyXtoY(fileTO, fileFROM) {
-    console.log(fileTO);
-    console.log(fileFROM);
-    
-
-    fs.stat(fileTO, function(err, stats) {
-        
-        if(err) {
-          console.log('erro ao processar arquivo ',fileTO);
-          return ;
+        if (err) {
+            chalk.red('Erro ao criar arquivo');
         }
-        console.log(stats);
-        if(stats.isFile()){
-          var readStream = fs.createReadStream(fileTO);
-          var writeStream = fs.createWriteStream(fileFROM);
-          readStream.pipe(writeStream);
+    });
+}
 
-          writeStream.on('finish', function() {
-              console.log(writeStream.bytesWritten);
-          });
-        } else if(stats.isDirectory()){
-          fs.mkdir( fileFROM ,function(){
-            debugger
+program
+    .version('0.0.1')
+    .option('-e, --equalizar', 'equalizar pasta X para Y <caminho_de> <caminho_para>')
+    .option('-m, --monitorar', 'monitora alterações na pasta X e copiar alteracoes para pasta Y  <caminho_do_json_com_definicao>  ')
+    .option('-h, --criar', 'criar json exemplo utilizado no monitorar  ')
+    .action(function(pathTO, pathFROM) {
 
+        chalk.red('tetretete');
+        if (program.equalizar) {
 
-          });
-
+        } else if (program.monitorar) {
 
         }
     });
+program.parse(process.argv);
 
+
+if (program.criar) {
+    createFile();
 }

@@ -15,7 +15,6 @@ program
         if (program.equalizar) {
             log().error('nao implementado');
         } else if (program.monitorar) {
-            debugger;
             monitor(pathTO);
         }
     });

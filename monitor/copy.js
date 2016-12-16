@@ -7,7 +7,7 @@
      //TODO : verificar se o arquivo foi copiado
      //TODO : verificar se muitos arquivos foram copiados
      //TODO: criar pasta por pasta
- module.exports = function exec(to, from) {
+function exec(to, from) {
      fs.exists(to, function(exists) {
          if (exists) {
              fs.watch(to, {
@@ -46,3 +46,5 @@
      });
 
  }
+ var args = process.argv;
+ exec(args[2], args[3]);

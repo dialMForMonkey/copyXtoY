@@ -1,8 +1,9 @@
 var log = require('../utils/log');
+var path = require('path');
 
 module.exports = function(to, from) {
-    var execFile = require('child_process').execFile;
-    var child = execFile('node', ['copy.js', to, from],
+    var exec = require('child_process').fork;
+    var child = exec( path.resolve(__dirname,'copy.js'), [ to, from],
         function(error, stdout, stderr) {
             if (error) {
                 log().error(error);
@@ -10,4 +11,4 @@ module.exports = function(to, from) {
             log().log(stdout);
         });
     return child;
-}
+};

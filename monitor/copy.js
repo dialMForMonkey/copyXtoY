@@ -1,13 +1,13 @@
  var fs = require('fs');
  var log = require('../utils/log');
-     //testes
-     //const to = './teste';
-     //const from = './teste_2';
-     //TODO : verificar se pasta destino existe
-     //TODO : verificar se o arquivo foi copiado
-     //TODO : verificar se muitos arquivos foram copiados
-     //TODO: criar pasta por pasta
- module.exports = function exec(to, from) {
+ //testes
+ //const to = './teste';
+ //const from = './teste_2';
+ //TODO : verificar se pasta destino existe
+ //TODO : verificar se o arquivo foi copiado
+ //TODO : verificar se muitos arquivos foram copiados
+ //TODO: criar pasta por pasta
+ function exec(to, from) {
      fs.exists(to, function(exists) {
          if (exists) {
              fs.watch(to, {
@@ -24,7 +24,7 @@
              log().warn('caminho nao existe');
          }
      });
- };
+ }
 
  function copyXtoY(fileTO, fileFROM) {
      fs.stat(fileTO, function(err, stats) {
@@ -44,5 +44,9 @@
              fs.mkdir(fileFROM, function() {});
          }
      });
-
  }
+
+
+ var args = process.argv;
+
+ exec(args[2], args[3]);

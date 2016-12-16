@@ -10,6 +10,8 @@
  function exec(to, from) {
      fs.exists(to, function(exists) {
          if (exists) {
+             log().log('Carregando caminho');
+             log().log(to);
              fs.watch(to, {
                  recursive: true
              }, function(event, filename) {
@@ -27,6 +29,7 @@
  }
 
  function copyXtoY(fileTO, fileFROM) {
+
      fs.stat(fileTO, function(err, stats) {
          if (err) {
              log().error('erro ao processar arquivo ', fileTO);

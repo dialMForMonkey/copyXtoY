@@ -6,8 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+   "copy_x_to_y": "index.js"
+  },
   "author": "",
+  "preferGlobal" : "true",
   "license": "ISC",
+  "main" : "./index.js",
   "dependencies": {
     "chalk": "^1.1.3",
     "commander": "^2.9.0",

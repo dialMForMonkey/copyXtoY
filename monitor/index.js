@@ -14,7 +14,6 @@ function loadFileConfig(file, cb) {
             log().warn(err);
         }
         try {
-          
             var monitor = JSON.parse(data);
             monitor.forEach(function(item) {
                 cb(item);

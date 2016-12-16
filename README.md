@@ -25,8 +25,8 @@ Ideia do modulo é monitorar alterações em uma pasta e copiar para outra , ou 
 
 ### Instalação :
 ```sh
-$ npm install copy_x_to_y -g
-$ copy_x_to_y -h
+$ npm install copyxtoy -g
+$ copyxtoy -h
 ```
 ### Todo
 

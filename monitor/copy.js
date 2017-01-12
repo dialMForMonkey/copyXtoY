@@ -1,5 +1,8 @@
  var fs = require('fs');
  var log = require('../utils/log');
+ var chokidar = require('chokidar');
+
+
  //testes
  //const to = './teste';
  //const from = './teste_2';
@@ -7,20 +10,65 @@
  //TODO : verificar se o arquivo foi copiado
  //TODO : verificar se muitos arquivos foram copiados
  //TODO: criar pasta por pasta
+
+ //TODO: trocar fs watch https://github.com/paulmillr/chokidar
+
+ var _erLastPath = /(?:.*)?\\(.*)?$/;
+
+
  function exec(to, from) {
      fs.exists(to, function(exists) {
          if (exists) {
              log().log('Carregando caminho');
              log().log(to);
-             fs.watch(to, {
-                 recursive: true
-             }, function(event, filename) {
-                 log().log('evento', event);
-                 log().log('alterado', filename);
+             chokidar.watch(to, {
+                 usePolling: true,
+                 interval: 100,
+                 binaryInterval: 300,
+                 ignoreInitial : true
+             }).on('add', function(path) {
+                 var pathOrFile = path.match(_erLastPath)[1];
+                 log().log('Adicionado :' + pathOrFile);
                  copyXtoY(
-                     to.concat('/', filename),
-                     from.concat('/', filename)
+                     path,
+                     from.concat('/', pathOrFile)
                  );
+             }).on('addDir', function(path) {
+                 var pathOrFile = path.match(_erLastPath)[1];
+                 log().log('Adicionado :' + pathOrFile);
+                 copyXtoY(
+                     path,
+                     from.concat('/', pathOrFile)
+                 );
+             }).on('change', function(path) {
+                 var pathOrFile = path.match(_erLastPath)[1];
+                 log().log('Alterado :' + pathOrFile);
+                 copyXtoY(
+                     path,
+                     from.concat('/', pathOrFile)
+                 );
+             }).on('unlink', function(path) {
+                 var pathOrFile = path.match(_erLastPath)[1];
+                 log().log('Deletado/renomeado :' + pathOrFile);
+                 fs.unlink(
+                     from.concat('/', pathOrFile),
+                     function(err) {
+                         if (err) {
+                             log().error('Erro ao renomear/deletar o arquivo  :' + pathOrFile);
+                         }
+                     });
+
+             }).on('unlinkDir', function(path) {
+                 var pathOrFile = path.match(_erLastPath)[1];
+                 log().log('Deletado/renomeado :' + pathOrFile);
+                 fs.unlink(
+                     from.concat('/', pathOrFile),
+                     function(err) {
+                         if (err) {
+                             log().error('Erro ao renomear/deletar o arquivo  :' + pathOrFile);
+                         }
+                     });
+
              });
          } else {
              log().warn('caminho nao existe');
@@ -41,7 +89,6 @@
              log().warn('copiando...');
              writeStream.on('finish', function() {
                  log().log('copiado');
-                 log().log(writeStream.bytesWritten);
              });
          } else if (stats.isDirectory()) {
              fs.mkdir(fileFROM, function() {});

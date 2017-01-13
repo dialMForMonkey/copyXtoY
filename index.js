@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var program = require('commander');
 var monitor = require('./monitor');
 var create = require('./create');
@@ -15,6 +16,7 @@ program
         if (program.equalizar) {
             log().error('nao implementado');
         } else if (program.monitorar) {
+            log().log('Iniciando');
             monitor(pathTO);
         }
     });
